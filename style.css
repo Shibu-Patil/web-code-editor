@@ -94,7 +94,7 @@ textarea.active {
 @keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY(5px);
+    transform: translateY(500px);
   }
   to {
     opacity: 1;
