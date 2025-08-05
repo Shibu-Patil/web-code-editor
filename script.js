@@ -182,7 +182,13 @@ runBtn.addEventListener("click", () => {
   style.textContent = cssVal;
   res.appendChild(style);
 
+ const oldScripts = res.querySelectorAll("script");
+  oldScripts.forEach(script => script.remove());
+
   const script = document.createElement("script");
-  script.textContent = jsVal;
-  res.appendChild(script);
+script.textContent = `(function() {
+  ${jsVal}
+})();`;
+res.appendChild(script);
+
 });
