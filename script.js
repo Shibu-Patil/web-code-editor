@@ -192,3 +192,13 @@ script.textContent = `(function() {
 res.appendChild(script);
 
 });
+
+
+window.addEventListener('keydown',(e)=>{
+console.log(e.key);
+  if(e.ctrlKey && e.key === "s"){
+  e.preventDefault()
+  runBtn.click()
+}
+
+})
