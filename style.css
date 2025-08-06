@@ -12,7 +12,7 @@ body {
   color: #fff;
 }
 
-select::-webkit-scrollbar{
+select::-webkit-scrollbar {
   display: none;
 }
 
@@ -102,9 +102,8 @@ textarea.active {
   }
 }
 
-.output {
+iframe#result {
+  flex: 1;
+  border: none;
   background-color: white;
-  color: black;
-  padding: 20px;
-  overflow: auto;
 }

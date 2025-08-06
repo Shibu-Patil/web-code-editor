@@ -6,29 +6,14 @@ const runBtn = document.querySelector("#run");
 const htmlTextArea = document.querySelector("#htmlTextArea");
 const cssTextArea = document.querySelector("#cssTextArea");
 const jsTextArea = document.querySelector("#jsTextArea");
-const res = document.querySelector("#result");
+const iframe = document.querySelector("#result");
 
 htmlTextArea.value = "<h1>Hello World</h1>";
 cssTextArea.value = "h1 { color: red; text-align: center; }";
 jsTextArea.value = "console.log('Hello from JS');";
 
-const htmlTags = [
-  "a", "abbr", "address", "area", "article", "aside", "audio",
-  "b", "base", "bdi", "bdo", "blockquote", "body", "br", "button",
-  "canvas", "caption", "cite", "code", "col", "colgroup",
-  "data", "datalist", "dd", "del", "details", "dfn", "dialog", "div", "dl", "dt",
-  "em", "embed", "fieldset", "figcaption", "figure", "footer", "form",
-  "h1", "h2", "h3", "h4", "h5", "h6", "head", "header", "hr", "html",
-  "i", "iframe", "img", "input", "ins",
-  "kbd", "label", "legend", "li", "link",
-  "main", "map", "mark", "meta", "meter",
-  "nav", "noscript", "object", "ol", "optgroup", "option", "output",
-  "p", "param", "picture", "pre", "progress",
-  "q", "rp", "rt", "ruby",
-  "s", "samp", "script", "section", "select", "small", "source", "span", "strong", "style", "sub", "summary", "sup",
-  "table", "tbody", "td", "template", "textarea", "tfoot", "th", "thead", "time", "title", "tr", "track",
-  "u", "ul", "var", "video", "wbr"
-];
+// Tag suggestions (same as before)
+const htmlTags = [ "a", "abbr", "address", "area", "article", "aside", "audio", "b", "base", "bdi", "bdo", "blockquote", "body", "br", "button", "canvas", "caption", "cite", "code", "col", "colgroup", "data", "datalist", "dd", "del", "details", "dfn", "dialog", "div", "dl", "dt", "em", "embed", "fieldset", "figcaption", "figure", "footer", "form", "h1", "h2", "h3", "h4", "h5", "h6", "head", "header", "hr", "html", "i", "iframe", "img", "input", "ins", "kbd", "label", "legend", "li", "link", "main", "map", "mark", "meta", "meter", "nav", "noscript", "object", "ol", "optgroup", "option", "output", "p", "param", "picture", "pre", "progress", "q", "rp", "rt", "ruby", "s", "samp", "script", "section", "select", "small", "source", "span", "strong", "style", "sub", "summary", "sup", "table", "tbody", "td", "template", "textarea", "tfoot", "th", "thead", "time", "title", "tr", "track", "u", "ul", "var", "video", "wbr" ];
 
 const dropdown = document.createElement("div");
 Object.assign(dropdown.style, {
@@ -42,7 +27,7 @@ Object.assign(dropdown.style, {
   maxHeight: "150px",
   overflowY: "auto",
   padding: "5px",
-  color:"black"
+  color: "black"
 });
 document.body.appendChild(dropdown);
 
@@ -175,30 +160,34 @@ runBtn.addEventListener("click", () => {
   const cssVal = cssTextArea.value;
   const jsVal = jsTextArea.value;
 
-  res.innerHTML = "";
-  res.innerHTML = htmlVal;
+  const doc = iframe.contentDocument || iframe.contentWindow.document;
 
-  const style = document.createElement("style");
-  style.textContent = cssVal;
-  res.appendChild(style);
+  const fullDoc = `
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="UTF-8">
+      <style>${cssVal}</style>
+    </head>
+    <body>
+      ${htmlVal}
+      <script>
+        (function(){
+          ${jsVal}
+        })();
+      <\/script>
+    </body>
+    </html>
+  `;
 
- const oldScripts = res.querySelectorAll("script");
-  oldScripts.forEach(script => script.remove());
-
-  const script = document.createElement("script");
-script.textContent = `(function() {
-  ${jsVal}
-})();`;
-res.appendChild(script);
-
+  doc.open();
+  doc.write(fullDoc);
+  doc.close();
 });
 
-
-window.addEventListener('keydown',(e)=>{
-console.log(e.key);
-  if(e.ctrlKey && e.key === "s"){
-  e.preventDefault()
-  runBtn.click()
-}
-
-})
+window.addEventListener('keydown', (e) => {
+  if (e.ctrlKey && e.key === "s") {
+    e.preventDefault();
+    runBtn.click();
+  }
+});
