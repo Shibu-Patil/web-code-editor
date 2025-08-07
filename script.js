@@ -37,11 +37,6 @@ handBurger.addEventListener("click", () => {
   containerDiv.classList.toggle("show");
   isOpen = !isOpen;
   handBurger.innerHTML = isOpen ? closeSVG : hamburgerSVG;
-  // isOpen?runBtn.style.marginTop="-137%":runBtn.style.marginTop="0%"
-  // isOpen?runBtn.style.position="absolute":""
-  // isOpen?runBtn.style.right="20px":""
-  // isOpen?runBtn.style.top="20px":""
-  
 });
 
 const htmlTags = [
@@ -83,6 +78,7 @@ htmlTextArea.addEventListener("input", (e) => {
     if (filtered.length) {
       showDropdown(filtered);
       positionDropdown(htmlTextArea, cursorPos);
+      htmlTextArea.scrollIntoView({ behavior: "smooth", block: "center" });
     } else {
       dropdown.style.display = "none";
     }
@@ -93,6 +89,7 @@ htmlTextArea.addEventListener("input", (e) => {
 
 htmlTextArea.addEventListener("keydown", (e) => {
   if (dropdown.style.display === "none") return;
+
   if (e.key === "ArrowDown") {
     selectedIndex = (selectedIndex + 1) % currentSuggestions.length;
     updateActiveSuggestion();
@@ -124,18 +121,26 @@ function showDropdown(suggestions) {
   dropdown.innerHTML = "";
   currentSuggestions = suggestions;
   selectedIndex = -1;
+
   suggestions.forEach((tag, idx) => {
     const item = document.createElement("div");
     item.textContent = tag;
     item.style.padding = "2px 6px";
     item.style.cursor = "pointer";
-    item.addEventListener("click", () => insertTag(tag));
+
+   
+    item.addEventListener("click", () => {
+      insertTag(`${tag}></${tag}>`);
+    });
+
     item.addEventListener("mouseover", () => {
       selectedIndex = idx;
       updateActiveSuggestion();
     });
+
     dropdown.appendChild(item);
   });
+
   dropdown.style.display = "block";
 }
 
@@ -207,7 +212,7 @@ runBtn.addEventListener("click", () => {
   doc.close();
 });
 
-window.addEventListener('keydown', (e) => {
+window.addEventListener("keydown", (e) => {
   if (e.ctrlKey && e.key === "s") {
     e.preventDefault();
     runBtn.click();
