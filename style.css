@@ -12,10 +12,6 @@ body {
   color: #fff;
 }
 
-select::-webkit-scrollbar {
-  display: none;
-}
-
 .container {
   height: 100%;
   width: 100%;
@@ -24,7 +20,8 @@ select::-webkit-scrollbar {
   gap: 20px;
 }
 
-.editor, .output {
+.editor,
+.output {
   flex: 1;
   border-radius: 12px;
   background-color: #1f1f1f;
@@ -39,9 +36,34 @@ select::-webkit-scrollbar {
   display: flex;
   gap: 10px;
   padding: 10px;
-  justify-content: center;
   background-color: #272727;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+  align-items: center;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+}
+
+#handburger {
+  display: none;
+  background: none;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+}
+
+#handburger svg {
+  width: 30px;
+  height: 30px;
+  fill: none;
+}
+
+#editor-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+#run {
+  margin-left: auto;
 }
 
 button {
@@ -106,4 +128,44 @@ iframe#result {
   flex: 1;
   border: none;
   background-color: white;
+}
+
+@media screen and (max-width: 768px) {
+  .container {
+    flex-direction: column;
+  }
+}
+
+@media screen and (max-width: 380px) {
+  #handburger {
+    display: block;
+  }
+
+  #editor-buttons {
+    display: none;
+  }
+
+  #editor-buttons.show {
+    display: flex !important;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+  }
+
+  .buttons {
+    flex-wrap: wrap;
+  }
+
+  #run {
+    margin-left: auto;
+  }
+}
+
+/* Autocomplete dropdown */
+div[style*="position: absolute"] {
+  scrollbar-width: none;
+}
+
+div[style*="position: absolute"]::-webkit-scrollbar {
+  display: none;
 }
